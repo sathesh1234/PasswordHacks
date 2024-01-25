@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #282c35;
+            margin: 0;
+            padding: 0;
+            color: #333; /* Darker text color */
+            text-align: center;
+            position: relative;
+        }
+
+        header {
+            background-color: #1a1e25;
+            padding: 20px;
+            text-align: center;
+            font-family: 'EvilFont', sans-serif;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 36px;
+            color: #ffc107;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        #how-to-use,
+        #info {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: left;
+            color: #333; /* Darker text color */
+        }
+
+        #forms-container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: 20px auto;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25%, 75% {
+                transform: translateX(-5px);
+            }
+            50% {
+                transform: translateX(5px);
+            }
+        }
+
+        #create-account-form,
+        #login-form,
+        #user-behavior-analysis {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-right: 10px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333; /* Darker text color */
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            width: calc(100% - 20px);
+            background-color: #ffc107;
+            color: #333;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #333;
+            color: #ffc107;
+        }
+
+        #detection-result {
+            color: #ff5733;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        #time-taken,
+        #typing-analysis {
+            margin-top: 10px;
+            color: #333; /* Darker text color */
+        }
+    </style>
+    <title>Password Spray Detection</title>
+</head>
+
+<body>
+    <header>
+        <h1>Password Spray Detection</h1>
+    </header>
+
+    <main>
+        <!-- How to Use This Feature -->
+        <div id="how-to-use">
+            <h2>How to Use This Feature</h2>
+            <p>
+                <strong>1. Create an Account:</strong>
+                If you're a new user, click on the "Create Account" section to register and set up your credentials.
+                Enter a new username and a strong password in the provided fields.
+                Click the "Create Account" button. If the username is unique and the account is created successfully, you will receive an alert confirming the account creation.
+            </p>
+
+            <p>
+                <strong>2. Login Attempts:</strong>
+                Navigate to the "Login" section. Enter your username and password in the respective fields.
+                Click the "Login" button. If the entered credentials are correct, you will receive an alert confirming a successful login.
+                If the entered credentials are incorrect, the system will display the message "Incorrect username or password."
+            </p>
+
+            <p>
+                <strong>3. Password Spray Detection:</strong>
+                Intentionally enter incorrect credentials three times consecutively.
+                After the third attempt, the system will trigger the Password Spray Detection feature.
+                If the time taken to type the incorrect password is below a certain threshold (indicating a rapid typing pattern),
+                the system will display "Possible password spray attack detected!"
+                The time taken to type the incorrect password and the average time per character will be shown for analysis in the "User Behavior Analysis" section.
+            </p>
+
+            <p>
+                <strong>4. Review Time Taken:</strong>
+                The system will display the time taken to type the password after each login attempt, helping to identify potential automated attempts.
+                This information is presented in the "Time taken to type password" and "Average time per character" sections during a detected password spray attack.
+            </p>
+
+            <h2>About Password Spraying Detection App</h2>
+            <p>
+                This website includes a password spraying detection app designed to educate users on the importance of identifying and mitigating password spraying attacks.
+                The app helps users understand the characteristics of password spraying attacks and provides insights into user behavior analysis during login attempts.
+                It is meant for educational purposes and aims to enhance awareness about cybersecurity threats.
+            </p>
+        </div>
+
+        <div id="forms-container">
+            <div id="create-account-form">
+                <h2>Create Account</h2>
+                <label for="new-username">Username:</label>
+                <input type="text" id="new-username" placeholder="Enter New Username">
+
+                <label for="new-password">Password:</label>
+                <input type="password" id="new-password" placeholder="Enter New Password">
+
+                <button onclick="createAccount()">Create Account</button>
+            </div>
+
+            <div id="login-form">
+                <h2>Login</h2>
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Enter Username">
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter Password">
+
+                <button id="login-button" onclick="login()">Login</button>
+            </div>
+
+            <!-- User Behavior Analysis -->
+            <div id="user-behavior-analysis">
+                <h2>User Behavior Analysis</h2>
+                <p id="typing-analysis"></p>
+            </div>
+        </div>
+
+        <!-- Detection result display -->
+        <div id="detection-result"></div>
+
+        <!-- Time taken display -->
+        <div id="time-taken"></div>
+    </main>
+
+    <script>
+        var startTime;
+        var users = [];
+
+        function createAccount() {
+            var newUsername = document.getElementById('new-username').value;
+            var newPassword = document.getElementById('new-password').value;
+
+            // Check if the username already exists
+            var isUsernameExists = users.some(function (user) {
+                return user.username === newUsername;
+            });
+
+            if (isUsernameExists) {
+                alert('Username already exists. Please choose another username.');
+            } else {
+                // Create an account
+                users.push({ username: newUsername, password: newPassword });
+                alert('Account created successfully!');
+            }
+        }
+
+        function login() {
+            var enteredUsername = document.getElementById('username').value;
+            var enteredPassword = document.getElementById('password').value;
+
+            // Check if the entered username and password match any account
+            var isCredentialsValid = users.some(function (user) {
+                return user.username === enteredUsername && user.password === enteredPassword;
+            });
+
+            // Display login result
+            var resultElement = document.getElementById('detection-result');
+            var timeTakenElement = document.getElementById('time-taken');
+            var typingAnalysisElement = document.getElementById('typing-analysis');
+
+            if (isCredentialsValid) {
+                resultElement.innerHTML = 'Login successful!';
+                timeTakenElement.innerHTML = '';
+                typingAnalysisElement.innerHTML = '';
+            } else {
+                // Check for password spray detection based on typing speed
+                var timeTaken = new Date().getTime() - startTime;
+                if (timeTaken < 1000) {
+                    resultElement.innerHTML = 'Possible password spray attack detected!';
+                    timeTakenElement.innerHTML = 'Time taken to type password: ' + (timeTaken / 1000) + ' seconds';
+
+                    // Perform basic user behavior analysis
+                    var passwordLength = enteredPassword.length;
+                    var averageTypingTime = timeTaken / passwordLength;
+                    typingAnalysisElement.innerHTML = 'Average time per character: ' + averageTypingTime.toFixed(2) + ' milliseconds';
+                } else {
+                    resultElement.innerHTML = 'Incorrect username or password.';
+                    timeTakenElement.innerHTML = '';
+                    typingAnalysisElement.innerHTML = '';
+                }
+            }
+
+            startTime = new Date().getTime(); // Record the time after each login attempt
+        }
+    </script>
+</body>
+
+</html>
